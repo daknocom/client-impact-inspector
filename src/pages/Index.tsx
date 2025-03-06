@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Users, 
@@ -8,6 +7,7 @@ import {
 } from 'lucide-react';
 
 import Header from '@/components/Header';
+import WebsiteMockup from '@/components/WebsiteMockup';
 import MetricsCard from '@/components/MetricsCard';
 import TaskList from '@/components/TaskList';
 import ImpactSection from '@/components/ImpactSection';
@@ -23,6 +23,7 @@ const Index = () => {
   // Sample data - in a real app this would come from an API or database
   const [clientName, setClientName] = useState('Acme Corporation');
   const [reportDate, setReportDate] = useState(new Date());
+  const [websiteUrl, setWebsiteUrl] = useState('example.com');
   
   // Sample metrics data
   const metrics = [
@@ -164,6 +165,11 @@ const Index = () => {
         {/* Report Content */}
         <div id="marketing-report" className="report-container bg-white rounded-xl shadow-md p-8 mb-8">
           <Header clientName={clientName} reportDate={reportDate} />
+          
+          {/* Website Mockup */}
+          <div className="mt-12">
+            <WebsiteMockup websiteUrl={websiteUrl} clientName={clientName} />
+          </div>
           
           {/* Metrics Overview */}
           <div className="mt-12 mb-16">

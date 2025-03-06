@@ -14,8 +14,21 @@ export const generatePDF = async (elementId: string, filename: string): Promise<
     const originalPadding = element.style.padding;
     element.style.padding = '10mm';
     
-    // Wait for charts to fully render
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // Special handling for website mockup
+    const iframe = element.querySelector('.website-iframe-container iframe');
+    const fallbackImg = element.querySelector('.website-image-fallback img');
+
+    // If there's an iframe in the mockup, temporarily hide it and show the image fallback
+    if (iframe && fallbackImg) {
+      iframe.style.opacity = '0';
+      const fallbackContainer = element.querySelector('.website-image-fallback');
+      if (fallbackContainer) {
+        fallbackContainer.classList.remove('opacity-0');
+      }
+    }
+    
+    // Wait for images to load
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Create canvas from element
     const canvas = await html2canvas(element, {
@@ -24,11 +37,27 @@ export const generatePDF = async (elementId: string, filename: string): Promise<
       logging: false,
       backgroundColor: '#ffffff',
       allowTaint: true,
-      foreignObjectRendering: true
+      foreignObjectRendering: false, // Changed to false for better compatibility
+      onclone: (clonedDoc) => {
+        // Additional modifications to the cloned document if needed
+        const clonedIframes = clonedDoc.querySelectorAll('iframe');
+        clonedIframes.forEach(frame => {
+          frame.remove(); // Remove iframes from the clone as they won't render in PDF
+        });
+      }
     });
     
     // Restore original styling
     element.style.padding = originalPadding;
+    
+    // Restore iframe visibility if it was modified
+    if (iframe && fallbackImg) {
+      iframe.style.opacity = '1';
+      const fallbackContainer = element.querySelector('.website-image-fallback');
+      if (fallbackContainer) {
+        fallbackContainer.classList.add('opacity-0');
+      }
+    }
     
     // Calculate PDF dimensions (A4)
     const imgData = canvas.toDataURL('image/png');
