@@ -1,6 +1,7 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Button } from "@/components/ui/button";
 
 export interface TrendDataPoint {
   month: string;
@@ -15,9 +16,25 @@ interface PerformanceTrendsProps {
 }
 
 const PerformanceTrends: React.FC<PerformanceTrendsProps> = ({ data }) => {
+  const [scaleType, setScaleType] = useState<'linear' | 'log'>('log');
+  
+  const toggleScale = () => {
+    setScaleType(prev => prev === 'linear' ? 'log' : 'linear');
+  };
+  
   return (
     <div className="space-y-6 animate-fade-in">
-      <h2 className="text-2xl font-bold font-display">Performance Trends</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold font-display">Performance Trends</h2>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={toggleScale}
+          className="text-xs"
+        >
+          {scaleType === 'linear' ? 'Show Logarithmic Scale' : 'Show Linear Scale'}
+        </Button>
+      </div>
       <div className="bg-white p-6 rounded-xl shadow-sm">
         <ResponsiveContainer width="100%" height={300}>
           <LineChart
@@ -31,7 +48,12 @@ const PerformanceTrends: React.FC<PerformanceTrendsProps> = ({ data }) => {
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis dataKey="month" tick={{ fill: '#6B7280' }} />
-            <YAxis tick={{ fill: '#6B7280' }} />
+            <YAxis 
+              tick={{ fill: '#6B7280' }} 
+              scale={scaleType}
+              domain={[1, 'auto']}
+              allowDataOverflow
+            />
             <Tooltip 
               contentStyle={{ 
                 backgroundColor: 'white', 
