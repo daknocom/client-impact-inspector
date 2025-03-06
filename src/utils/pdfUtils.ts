@@ -12,14 +12,19 @@ export const generatePDF = async (elementId: string, filename: string): Promise<
   try {
     // Temporarily modify element for optimal PDF capture
     const originalPadding = element.style.padding;
-    element.style.padding = '0';
+    element.style.padding = '10mm';
+    
+    // Wait for charts to fully render
+    await new Promise(resolve => setTimeout(resolve, 500));
     
     // Create canvas from element
     const canvas = await html2canvas(element, {
       scale: 2,
       useCORS: true,
       logging: false,
-      backgroundColor: '#ffffff'
+      backgroundColor: '#ffffff',
+      allowTaint: true,
+      foreignObjectRendering: true
     });
     
     // Restore original styling
@@ -37,8 +42,27 @@ export const generatePDF = async (elementId: string, filename: string): Promise<
     const imgWidth = 210; // A4 width in mm
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
     
-    // Add image to PDF
-    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+    // Handle multi-page content if needed
+    if (imgHeight > 297) { // A4 height in mm
+      let heightLeft = imgHeight;
+      let position = 0;
+      
+      // Add first page
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= 297;
+      position -= 297;
+      
+      // Add additional pages if needed
+      while (heightLeft > 0) {
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= 297;
+        position -= 297;
+      }
+    } else {
+      // Content fits on a single page
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+    }
     
     // Save PDF
     pdf.save(`${filename}.pdf`);

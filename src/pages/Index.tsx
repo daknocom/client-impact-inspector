@@ -12,8 +12,12 @@ import MetricsCard from '@/components/MetricsCard';
 import TaskList from '@/components/TaskList';
 import ImpactSection from '@/components/ImpactSection';
 import PDFExport from '@/components/PDFExport';
+import PerformanceTrends from '@/components/PerformanceTrends';
+import ChannelBreakdown from '@/components/ChannelBreakdown';
 import { Task } from '@/components/TaskList';
 import { ImpactItem } from '@/components/ImpactSection';
+import { TrendDataPoint } from '@/components/PerformanceTrends';
+import { ChannelData } from '@/components/ChannelBreakdown';
 
 const Index = () => {
   // Sample data - in a real app this would come from an API or database
@@ -27,7 +31,7 @@ const Index = () => {
       value: 125830, 
       previousValue: 98450, 
       icon: <Users className="h-5 w-5" />,
-      color: 'blue',
+      color: "blue" as const,
       delay: 0
     },
     { 
@@ -35,7 +39,7 @@ const Index = () => {
       value: 23456, 
       previousValue: 18970, 
       icon: <MousePointerClick className="h-5 w-5" />,
-      color: 'green',
+      color: "green" as const,
       delay: 100
     },
     { 
@@ -43,7 +47,7 @@ const Index = () => {
       value: 284, 
       previousValue: 196, 
       icon: <BarChart4 className="h-5 w-5" />,
-      color: 'orange',
+      color: "orange" as const,
       delay: 200
     },
     { 
@@ -51,9 +55,28 @@ const Index = () => {
       value: 142, 
       previousValue: 98, 
       icon: <MessageSquareText className="h-5 w-5" />,
-      color: 'red',
+      color: "red" as const,
       delay: 300
     }
+  ];
+  
+  // Sample performance trends data
+  const trendsData: TrendDataPoint[] = [
+    { month: 'Jan', impressions: 65000, visits: 12800, leads: 125, conversations: 52 },
+    { month: 'Feb', impressions: 72000, visits: 14300, leads: 147, conversations: 67 },
+    { month: 'Mar', impressions: 84500, visits: 16500, leads: 162, conversations: 75 },
+    { month: 'Apr', impressions: 79800, visits: 15800, leads: 158, conversations: 71 },
+    { month: 'May', impressions: 92300, visits: 18200, leads: 179, conversations: 86 },
+    { month: 'Jun', impressions: 98450, visits: 18970, leads: 196, conversations: 98 },
+    { month: 'Jul', impressions: 125830, visits: 23456, leads: 284, conversations: 142 },
+  ];
+
+  // Sample channel breakdown data
+  const channelData: ChannelData[] = [
+    { name: 'Organic Search', value: 42, color: '#0A84FF' },
+    { name: 'Social Media', value: 28, color: '#30D158' },
+    { name: 'Direct', value: 18, color: '#FF9F0A' },
+    { name: 'Referral', value: 12, color: '#FF453A' },
   ];
   
   // Sample tasks data
@@ -158,6 +181,16 @@ const Index = () => {
                 />
               ))}
             </div>
+          </div>
+          
+          {/* Performance Trends Chart */}
+          <div className="mb-16">
+            <PerformanceTrends data={trendsData} />
+          </div>
+          
+          {/* Channel Breakdown Chart */}
+          <div className="mb-16">
+            <ChannelBreakdown data={channelData} />
           </div>
           
           {/* Tasks Completed */}
