@@ -11,8 +11,9 @@ export const generatePDF = async (elementId: string, filename: string): Promise<
 
   try {
     // Temporarily modify element for optimal PDF capture
-    const originalPadding = element.style.padding;
-    element.style.padding = '10mm';
+    const htmlElement = element as HTMLElement;
+    const originalPadding = htmlElement.style.padding;
+    htmlElement.style.padding = '10mm';
     
     // Special handling for website mockup
     const iframe = element.querySelector('.website-iframe-container iframe');
@@ -20,7 +21,7 @@ export const generatePDF = async (elementId: string, filename: string): Promise<
 
     // If there's an iframe in the mockup, temporarily hide it and show the image fallback
     if (iframe && fallbackImg) {
-      iframe.style.opacity = '0';
+      (iframe as HTMLElement).style.opacity = '0';
       const fallbackContainer = element.querySelector('.website-image-fallback');
       if (fallbackContainer) {
         fallbackContainer.classList.remove('opacity-0');
@@ -48,11 +49,11 @@ export const generatePDF = async (elementId: string, filename: string): Promise<
     });
     
     // Restore original styling
-    element.style.padding = originalPadding;
+    htmlElement.style.padding = originalPadding;
     
     // Restore iframe visibility if it was modified
     if (iframe && fallbackImg) {
-      iframe.style.opacity = '1';
+      (iframe as HTMLElement).style.opacity = '1';
       const fallbackContainer = element.querySelector('.website-image-fallback');
       if (fallbackContainer) {
         fallbackContainer.classList.add('opacity-0');

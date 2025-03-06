@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Users, 
@@ -13,11 +14,9 @@ import TaskList from '@/components/TaskList';
 import ImpactSection from '@/components/ImpactSection';
 import PDFExport from '@/components/PDFExport';
 import PerformanceTrends from '@/components/PerformanceTrends';
-import ChannelBreakdown from '@/components/ChannelBreakdown';
 import { Task } from '@/components/TaskList';
 import { ImpactItem } from '@/components/ImpactSection';
 import { TrendDataPoint } from '@/components/PerformanceTrends';
-import { ChannelData } from '@/components/ChannelBreakdown';
 
 const Index = () => {
   // Sample data - in a real app this would come from an API or database
@@ -70,14 +69,6 @@ const Index = () => {
     { month: 'May', impressions: 92300, visits: 18200, leads: 179, conversations: 86 },
     { month: 'Jun', impressions: 98450, visits: 18970, leads: 196, conversations: 98 },
     { month: 'Jul', impressions: 125830, visits: 23456, leads: 284, conversations: 142 },
-  ];
-
-  // Sample channel breakdown data
-  const channelData: ChannelData[] = [
-    { name: 'Organic Search', value: 42, color: '#0A84FF' },
-    { name: 'Social Media', value: 28, color: '#30D158' },
-    { name: 'Direct', value: 18, color: '#FF9F0A' },
-    { name: 'Referral', value: 12, color: '#FF453A' },
   ];
   
   // Sample tasks data
@@ -192,11 +183,6 @@ const Index = () => {
           {/* Performance Trends Chart */}
           <div className="mb-16">
             <PerformanceTrends data={trendsData} />
-          </div>
-          
-          {/* Channel Breakdown Chart */}
-          <div className="mb-16">
-            <ChannelBreakdown data={channelData} />
           </div>
           
           {/* Tasks Completed */}
